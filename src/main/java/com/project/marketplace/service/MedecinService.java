@@ -18,9 +18,9 @@ public class MedecinService {
     private void initDB() {
         Medecin medecin = new Medecin();
         medecin.setEmail("Abdou@gmail.com");
-        medecin.setPrenom("CIN1");
+        medecin.setLastname("CIN1");
         medecin.setPassword("password");
-        medecin.setNom("Laouali");
+        medecin.setFirstname("Laouali");
         this.addMedecin(medecin);
     }
 //

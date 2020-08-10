@@ -28,6 +28,7 @@ public class ComplaintController {
         complaint.setEmail(email);
         complaint.setMessage(message);
         complaint.setObjet(objet);
+        complaint.setType(0);
         complaint.setDate(new Date());
         return this.complaintService.addComplaint(complaint);
     }
@@ -42,6 +43,7 @@ public class ComplaintController {
     public Complaint addComplaint(@RequestParam("Complaint") String data){
         Complaint complaint = new Gson().fromJson(data, Complaint.class);
         complaint.setVue(false);
+        complaint.setType(1);
         complaint.setDate(new Date());
         return this.complaintService.addComplaint(complaint);
     }

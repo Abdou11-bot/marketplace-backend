@@ -22,13 +22,13 @@ public class AdminService {
         this.productRepository = productRepository;
         this.specialityRepository = specialityRepository;
 //        this.initDB();
-        this.initDBProvider();
+      //  this.initDBProvider();
     }
 
     private void initDBProvider(){
         Provider provider = new Provider();
         provider.setStatus(1);
-        provider.setEmail("admin@gmail.com tetettetetetet");
+        provider.setEmail("admin@gmail.com");
         provider.setFirstname("a");
         provider.setFirstname("adminFistname");
         provider.setLastname("adminLastname");

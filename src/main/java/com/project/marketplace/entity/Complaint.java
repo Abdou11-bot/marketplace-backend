@@ -20,9 +20,19 @@ public class Complaint {
 	private Date date;
 	@Column
 	private boolean vue;
+	@Column
+	private int type;
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "product_id")
 	private Product product;
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public void setId(long id) {
 		this.id = id;

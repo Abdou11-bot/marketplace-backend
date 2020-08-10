@@ -9,9 +9,9 @@ public class Medecin {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	@Column
-	private String nom;
+	private String firstname;
 	@Column
-	private String prenom;
+	private String lastname;
 	@Column
 	private String password;
 	@Column
@@ -58,20 +58,20 @@ public class Medecin {
 		this.id = id;
 	}
 
-	public String getNom() {
-		return nom;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
 
-	public String getPrenom() {
-		return prenom;
+	public String getLastname() {
+		return lastname;
 	}
 
-	public void setPrenom(String prenom) {
-		this.prenom = prenom;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public boolean isAdmin() {

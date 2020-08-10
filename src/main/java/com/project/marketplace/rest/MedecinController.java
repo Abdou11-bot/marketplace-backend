@@ -33,7 +33,7 @@ public class MedecinController {
     }
 
 
-    @GetMapping("get/{email}")
+    @GetMapping("getByLogin/{login}")
     public Medecin getMedecinByEmail(@PathVariable("login") String login){
         return this.medecinService.getMedecin(login);
     }
