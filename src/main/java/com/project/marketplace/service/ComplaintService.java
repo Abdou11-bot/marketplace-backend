@@ -1,6 +1,7 @@
 package com.project.marketplace.service;
 
 import com.project.marketplace.entity.Complaint;
+import com.project.marketplace.entity.Medecin;
 import com.project.marketplace.entity.Product;
 import com.project.marketplace.entity.Provider;
 import com.project.marketplace.repository.ComplaintRepository;
@@ -12,11 +13,13 @@ import java.util.*;
 public class ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final ProductService productService;
+    private final MedecinService medecinService;
     private final ProviderService providerService;
 
-    public ComplaintService(ComplaintRepository complaintRepository, ProductService productService, ProviderService providerService) {
+    public ComplaintService(ComplaintRepository complaintRepository, ProductService productService, MedecinService medecinService, ProviderService providerService) {
         this.complaintRepository = complaintRepository;
         this.productService = productService;
+        this.medecinService = medecinService;
 //        this.initDB();
         this.providerService = providerService;
     }
@@ -49,9 +52,28 @@ public class ComplaintService {
         });
         return complaints;
     }
+    public  List<Complaint> getSentComplaint(String login){
+        Medecin medecin = this.medecinService.getMedecin(login);
+        List<Complaint> complaints =new ArrayList<>();
+        complaints.addAll(this.complaintRepository.findAllByMedecinEquals(medecin));
+        Collections.sort(complaints, new Comparator<Complaint>() {
+            @Override
+            public int compare(Complaint o1, Complaint o2)
+            {
+                return (o1.getId() < o2.getId() ? -1 :
+                        (o1.getId() == o2.getId() ? 0 : 1));
+            }
+        });
+        return complaints;
+    }
     public  Complaint getComplaint(long id){ return  this.complaintRepository.findById(id).orElseThrow();}
     public  List<Complaint> getComplaintOfProduct(long id){ return  this.complaintRepository.findAllByProductEquals(this.productService.getProduct(id));}
     public Complaint addComplaint(Complaint complaint) {
         return this.complaintRepository.save(complaint);
+    }
+
+    public boolean DeleteComplaint(long id){
+        this.complaintRepository.deleteById(id);
+        return true;
     }
 }

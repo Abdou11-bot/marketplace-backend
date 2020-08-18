@@ -32,7 +32,7 @@ public class ComplaintController {
         complaint.setDate(new Date());
         return this.complaintService.addComplaint(complaint);
     }
-    @GetMapping("/setvue/{id}")
+    @PutMapping("/setvue/{id}")
     public Complaint setVue(@PathVariable("id") long id){
         Complaint complaint = this.complaintService.getComplaint(id);
         complaint.setVue(true);
@@ -58,6 +58,11 @@ public class ComplaintController {
         return this.complaintService.getOwnedComplaint(login);
     }
 
+    @GetMapping("getSentComplaint/{login}")
+    public List<Complaint> getSendComplaint(@PathVariable("login") String login) {
+        return this.complaintService.getSentComplaint(login);
+    }
+
     @GetMapping("get/{id}")
     public Complaint getComplaint(@PathVariable("id") long id) {
         return this.complaintService.getComplaint(id);
@@ -68,5 +73,8 @@ public class ComplaintController {
         return this.complaintService.getComplaintOfProduct(id);
     }
 
-
+    @DeleteMapping("deletecomplaint/{id}")
+    public boolean deletecomplaint(@PathVariable("id") long id) {
+        return this.complaintService.DeleteComplaint(id);
+    }
 }

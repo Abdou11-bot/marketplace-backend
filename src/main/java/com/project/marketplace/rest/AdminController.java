@@ -1,27 +1,19 @@
 package com.project.marketplace.rest;
 
 import com.google.gson.Gson;
-import com.project.marketplace.entity.Image;
-import com.project.marketplace.entity.Product;
+import com.project.marketplace.entity.Medecin;
 import com.project.marketplace.entity.Provider;
-import com.project.marketplace.entity.Speciality;
-import com.project.marketplace.service.ImageService;
-import com.project.marketplace.service.ImageStorageService;
-import com.project.marketplace.service.ProviderService;
-import com.project.marketplace.service.ProxyAdmin;
+import com.project.marketplace.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
     private final ProviderService providerService;
+    private final MedecinService medecinService;
     private final ProxyAdmin proxyAdmin;
     private final ImageController imageController;
     private final ImageService imageService;
@@ -29,26 +21,41 @@ public class AdminController {
     @Autowired
     private ImageStorageService imageStorageService;
 
-    public AdminController(ProviderService providerService, ProxyAdmin proxyAdmin, ImageController imageController, ImageService imageService) {
+    public AdminController(ProviderService providerService, MedecinService medecinService, ProxyAdmin proxyAdmin, ImageController imageController, ImageService imageService) {
         this.providerService = providerService;
+        this.medecinService = medecinService;
         this.proxyAdmin = proxyAdmin;
         this.imageController = imageController;
         this.imageService = imageService;
     }
-    @GetMapping("/login/{admin}")
-    public boolean login(@PathVariable("admin") String admin, @RequestParam("login") String login, @RequestParam("password") String password){
+    @GetMapping("/login")
+    public int login(@RequestParam("login") String login, @RequestParam("password") String password){
         Provider provider=null;
-        if (admin.equals("admin")) {
-            provider = this.providerService.getAdmin();
-        }else{
-            provider = this.providerService.getProviderByEmail(login);
-        }
+        provider = this.providerService.getProviderByEmail(login);
         if(provider == null)
-            return false;
-        if(provider.getPassword().equals(password))
-            return true;
-        return false;
+            return -1;
+        if(provider.getPassword().equals(password)){
+            if(provider.isAdmin()){
+                return 1;
+            }
+            return 0;
+        }
+        return -1;
     }
+//    @GetMapping("/login/{admin}")
+//    public boolean login(@PathVariable("admin") String admin, @RequestParam("login") String login, @RequestParam("password") String password){
+//        Provider provider=null;
+//        if (admin.equals("admin")) {
+//            provider = this.providerService.getAdmin();
+//        }else{
+//            provider = this.providerService.getProviderByEmail(login);
+//        }
+//        if(provider == null)
+//            return false;
+//        if(provider.getPassword().equals(password))
+//            return true;
+//        return false;
+//    }
     @PutMapping("/updateAdmin")
     public Provider updateAdmin(@Valid @RequestParam("admin") String adminData) {
         Provider admin = new Gson().fromJson(adminData, Provider.class); ;
@@ -82,4 +89,22 @@ public class AdminController {
         return this.proxyAdmin.activateProvider(id);
     }
 
+    @GetMapping("/providersExists/{login}")
+    public boolean providersExists(@PathVariable("login") String login) {
+        Provider provider = null;
+        provider = this.providerService.getProviderByEmail(login);
+        if(provider == null){
+            return false;
+        }
+        return true;
+    }
+    @GetMapping("/medecinExists/{login}")
+    public boolean medecinExists(@PathVariable("login") String login) {
+        Medecin medecin = null;
+        medecin = this.medecinService.getMedecin(login);
+        if(medecin == null){
+            return false;
+        }
+        return true;
+    }
 }

@@ -203,4 +203,5 @@ public class ProviderController {
     public Speciality getSpeciality(@PathVariable("id") long id) {
         return this.specialityService.getSpeciality(id);
     }
+
 }

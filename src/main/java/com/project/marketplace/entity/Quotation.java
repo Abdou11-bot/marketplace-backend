@@ -20,6 +20,8 @@ public class Quotation {
 	@Column
 	private String quantity;
 	@Column
+	private String tel;
+	@Column
 	private String postalCode;
 	@Column
 	private Date date;
@@ -27,9 +29,28 @@ public class Quotation {
 	private boolean traiter;
 	@Column
 	private String locality;
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "product_id")
 	private Product product;
+	@ManyToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "Medecin_id")
+	private Medecin medecin;
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public Medecin getMedecin() {
+		return medecin;
+	}
+
+	public void setMedecin(Medecin medecin) {
+		this.medecin = medecin;
+	}
 
 	public void setId(long id) {
 		this.id = id;

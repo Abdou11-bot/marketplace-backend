@@ -22,9 +22,20 @@ public class Complaint {
 	private boolean vue;
 	@Column
 	private int type;
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.DETACH)
 	@JoinColumn(name = "product_id")
 	private Product product;
+	@ManyToOne(cascade = CascadeType.DETACH)
+	@JoinColumn(name = "Medecin_id")
+	private Medecin medecin;
+
+	public Medecin getMedecin() {
+		return medecin;
+	}
+
+	public void setMedecin(Medecin medecin) {
+		this.medecin = medecin;
+	}
 
 	public int getType() {
 		return type;

@@ -30,7 +30,7 @@ public class QuotationController {
         return this.quotationService.getAllQuotations();
     }
 
-    @GetMapping("/traiter/{id}")
+    @PutMapping("/traiter/{id}")
     public Quotation traiter(@PathVariable("id") long id){
         Quotation quotation = this.quotationService.getQuotation(id);
         quotation.setTraiter(true);
@@ -50,6 +50,16 @@ public class QuotationController {
     @GetMapping("getAllOf/{id}")
     public List<Quotation> getQuotationsOfProduct(@PathVariable("id") long id) {
         return this.quotationService.getQuotationOfProduct(id);
+    }
+
+    @GetMapping("getSentQuotation/{login}")
+    public List<Quotation> getSentQuotation(@PathVariable("login") String login) {
+        return this.quotationService.getQuotationRequestedBy(login);
+    }
+
+    @DeleteMapping("deletequotation/{id}")
+    public boolean getSentQuotation(@PathVariable("id") long id) {
+        return this.quotationService.DeleteQuotation(id);
     }
 
 }

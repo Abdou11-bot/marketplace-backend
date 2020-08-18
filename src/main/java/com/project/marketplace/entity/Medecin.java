@@ -1,7 +1,10 @@
 package com.project.marketplace.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Medecin {
@@ -22,9 +25,21 @@ public class Medecin {
 	private boolean admin = false;
 	@Column
 	private String tel;
-	@OneToOne(cascade = CascadeType.PERSIST)
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "Speciality")
 	private Speciality speciality;
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "Wishlist_medecin_id")
+	private List<Product> products;
+
+	public List<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(List<Product> products) {
+		this.products = products;
+	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}

@@ -1,13 +1,14 @@
 package com.project.marketplace.service;
 
+import com.project.marketplace.entity.Medecin;
 import com.project.marketplace.entity.Product;
 import com.project.marketplace.entity.Quotation;
 import com.project.marketplace.repository.QuotationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -15,12 +16,14 @@ public class QuotationService {
     private final QuotationRepository quotationRepository;
     private final ProductService productService;
     private final ProviderService providerService;
+    private final MedecinService medecinService;
 
-    public QuotationService(QuotationRepository quotationRepository, ProductService productService, ProviderService providerService) {
+    public QuotationService(QuotationRepository quotationRepository, ProductService productService, ProviderService providerService, MedecinService medecinService) {
         this.quotationRepository = quotationRepository;
         this.productService = productService;
 //        this.initDB();
         this.providerService = providerService;
+        this.medecinService = medecinService;
     }
 //    private void initDB() {
 //        Quotation quotation = new Quotation();
@@ -47,5 +50,15 @@ public class QuotationService {
             quotations.addAll(this.getQuotationOfProduct(product.getId()));
         }
         return  quotations;
+    }
+    public List<Quotation> getQuotationRequestedBy(String login) {
+        Medecin medecin = this.medecinService.getMedecin(login);
+        List<Quotation> quotations = new ArrayList<>();
+        quotations.addAll(this.quotationRepository.findAllByMedecinEquals(medecin));
+        return  quotations;
+    }
+    public boolean DeleteQuotation(long id){
+        this.quotationRepository.deleteById(id);
+        return true;
     }
 }
