@@ -1,6 +1,8 @@
 package com.project.marketplace.rest;
 
+import com.google.gson.Gson;
 import com.project.marketplace.entity.Product;
+import com.project.marketplace.entity.Provider;
 import com.project.marketplace.entity.Speciality;
 import com.project.marketplace.service.ProductService;
 import com.project.marketplace.service.SpecialityService;
@@ -33,6 +35,18 @@ public class ProductController {
         Speciality speciality=null;
         speciality=this.specialityService.getSpeciality(id);
         return this.productService.getAllProductsForSpeciality(speciality);
+    }
+
+    @GetMapping("getProductsSimilarTo/{id}")
+    public List<Product> getProductsSimilarTo(@PathVariable long id) {
+        Product product = this.productService.getProduct(id);
+        String[] params = new String[] { product.getSpeciality().getId()+"", product.getProvider().getId()+"", product.getName()};
+        List<Product> products = this.getResearchResult(params);
+        for (int i=0;i<products.size();i++){
+            if(products.get(i).getId()==id)
+                products.remove(i);
+        }
+        return products;
     }
 
     @GetMapping("productsids")

@@ -77,4 +77,15 @@ public class ComplaintController {
     public boolean deletecomplaint(@PathVariable("id") long id) {
         return this.complaintService.DeleteComplaint(id);
     }
+
+    @GetMapping("existsForMedecin/{medecin}/{product}")
+    public boolean existsForMedecin(@PathVariable("medecin") String medecin_login, @PathVariable("product") long product_id) {
+        List<Complaint> complaints = this.complaintService.getSentComplaint(medecin_login);
+        for (Complaint complaint:complaints) {
+            if(complaint.getProduct().getId() == product_id){
+                return true;
+            }
+        }
+        return false;
+    }
 }

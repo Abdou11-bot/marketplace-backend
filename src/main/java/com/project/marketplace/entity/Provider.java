@@ -39,10 +39,10 @@ public class Provider {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinTable(name = "Provider_Speciality",
             joinColumns = {
-                    @JoinColumn(name = "speciality_id", referencedColumnName = "id",
+                    @JoinColumn(name = "provider_id", referencedColumnName = "id",
                             nullable = false, updatable = false)},
             inverseJoinColumns = {
-                    @JoinColumn(name = "provider_id", referencedColumnName = "id",
+                    @JoinColumn(name = "speciality_id", referencedColumnName = "id",
                             nullable = false, updatable = false)})
     private List<Speciality> Specialities;
 

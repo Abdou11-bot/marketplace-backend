@@ -9,6 +9,7 @@ import com.project.marketplace.service.ProductService;
 import com.project.marketplace.service.SpecialityService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -65,18 +66,65 @@ public class MedecinController {
     }
 
     @PutMapping("addtowishlist/{medecin}/{product}")
-    public List<Product> addtowishlist(@RequestParam("product") long product_id, @RequestParam("medecin") long medecin_id) {
+    public List<Product> addtowishlist(@PathVariable("medecin") String medecin_login, @PathVariable("product") long product_id) {
         Product product = this.productService.getProduct(product_id);
-        Medecin medecin = this.medecinService.getMedecin(medecin_id);
+        Medecin medecin = this.medecinService.getMedecin(medecin_login);
         List<Product> products = medecin.getProducts();
-        products.add(product);
-        medecin.setProducts(products);
+        boolean flag = false;
+        for (Product product1:products) {
+            if(product.getId()==product1.getId()){
+                flag=true;
+                break;
+            }
+        }
+        if(!flag){
+            products.add(product);
+            medecin.setProducts(products);
+            this.medecinService.addMedecin(medecin);
+        }
+        return  medecin.getProducts();
+    }
+    @PutMapping("deletfromwishlist/{medecin}/{product}")
+    public List<Product> deletfromwishlist(@PathVariable("medecin") String medecin_login, @PathVariable("product") long product_id) {
+        Product product = this.productService.getProduct(product_id);
+        Medecin medecin = this.medecinService.getMedecin(medecin_login);
+        List<Product> products = medecin.getProducts();
+        int indice=-1;
+        for (int i=0;i<products.size();i++) {
+            if(products.get(i).getId()==product.getId()){
+                indice = i;
+                break;
+            }
+        }
+        if(indice!=-1){
+            products.remove(indice);
+            medecin.setProducts(products);
+            this.medecinService.addMedecin(medecin);
+        }
+        return  medecin.getProducts();
+    }
+    @PutMapping("emptywishlist/{medecin}")
+    public List<Product> deletfromwishlist(@PathVariable("medecin") String medecin_login) {
+        Medecin medecin = this.medecinService.getMedecin(medecin_login);
+        medecin.setProducts(new ArrayList<Product>());
+        this.medecinService.addMedecin(medecin);
         return  medecin.getProducts();
     }
     @GetMapping("getWishlist/{medecin}")
-    public List<Product> getWidhlist(@RequestParam("medecin") long medecin_id) {
-        Medecin medecin = this.medecinService.getMedecin(medecin_id);
+    public List<Product> getWidhlist(@PathVariable("medecin") String medecin_login) {
+        Medecin medecin = this.medecinService.getMedecin(medecin_login);
         return  medecin.getProducts();
+    }
+    @GetMapping("existsInWishlist/{medecin}/{product}")
+    public boolean existsInWishlist(@PathVariable("medecin") String medecin_login, @PathVariable("product") long product_id) {
+        Medecin medecin = this.medecinService.getMedecin(medecin_login);
+        List<Product> products = medecin.getProducts();
+        for (Product product: products) {
+            if(product.getId() == product_id){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

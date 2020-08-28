@@ -17,6 +17,31 @@ public class SpecialityService {
         return this.specialityRepositor.findById(id).orElseThrow();
     }
 
+    public Speciality addSpeciality(Speciality speciality){
+        return this.specialityRepositor.save(speciality);
+    }
+
+    public Speciality updatedSpeciality(long id, Speciality speciality){
+        Speciality speciality1 = null;
+        speciality1 = this.specialityRepositor.findById(id).orElseThrow();
+        if(speciality == null) {
+            return null;
+        }else {
+            speciality.setId(speciality1.getId());
+            return this.specialityRepositor.save(speciality);
+        }
+    }
+
+    public boolean deletedSpeciality(long id){
+        this.specialityRepositor.deleteById(id);
+        Speciality speciality = null;
+        speciality = this.specialityRepositor.findById(id).orElseThrow();
+        if(speciality == null)
+            return true;
+        else
+            return false;
+    }
+
     private void initDB() {
         this.specialityRepositor.save(new Speciality("Allergologie",500,"/images/Specialities/img1.jpeg"));
         this.specialityRepositor.save(new Speciality("Immunologie",500,"/images/Specialities/immunologie.jpg"));

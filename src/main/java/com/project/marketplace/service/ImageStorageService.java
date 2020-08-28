@@ -38,6 +38,26 @@ public class ImageStorageService {
             throw new ImageStorageException("Could not store file " + imageName + ". Please try again!", ex);
         }
     }
+
+    public String storeImageForSpeciality(MultipartFile image, Speciality speciality) {
+        String imageName = StringUtils.cleanPath(image.getOriginalFilename());
+        try {
+            if(imageName.contains("..")) {
+                throw new ImageStorageException("Sorry! Filename contains invalid path sequence " + imageName);
+            }
+            try {
+                this.fileStorageLocation = Paths.get(this.pathFirstPart+"/images/Specialities/").toAbsolutePath().normalize();
+                Files.createDirectories(this.fileStorageLocation);
+            } catch (Exception ex) {
+                throw new ImageStorageException("Could not create the directory where the uploaded file will be stored.", ex);
+            }
+            Path targetLocation = this.fileStorageLocation.resolve(imageName);
+            Files.copy(image.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            return "/images/Specialities/"+imageName;
+        } catch (IOException ex) {
+            throw new ImageStorageException("Could not store file " + imageName + ". Please try again!", ex);
+        }
+    }
     public String storeCatalogue(MultipartFile Catalogue, Product product) {
         String CatalogueName = StringUtils.cleanPath(Catalogue.getOriginalFilename());
         try {

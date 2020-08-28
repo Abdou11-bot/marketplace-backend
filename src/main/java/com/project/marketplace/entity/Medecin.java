@@ -22,14 +22,19 @@ public class Medecin {
 	@Column
 	private String email;
 	@Column
-	private boolean admin = false;
-	@Column
 	private String tel;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "Speciality")
 	private Speciality speciality;
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Wishlist_medecin_id")
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+	@JoinTable(name = "Medecin_Wishlist",
+			joinColumns = {
+					@JoinColumn(name = "medecin_id", referencedColumnName = "id",
+							nullable = false, updatable = false)},
+			inverseJoinColumns = {
+					@JoinColumn(name = "product_id", referencedColumnName = "id",
+							nullable = false, updatable = false)})
 	private List<Product> products;
 
 	public List<Product> getProducts() {
@@ -87,14 +92,6 @@ public class Medecin {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
-	}
-
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
 	}
 
 	public String getTel() {

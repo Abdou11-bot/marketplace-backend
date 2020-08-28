@@ -108,6 +108,14 @@ public class ProviderController {
         return product3;
     }
 
+    @PostMapping("/addSpeciality")
+    public Speciality addSpeciality(@RequestParam("speciality") String specialityStr,@RequestParam("image") MultipartFile imageStr) {
+        Speciality speciality = new Gson().fromJson(specialityStr, Speciality.class);
+        String path = this.imageStorageService.storeImageForSpeciality(imageStr,speciality);
+        speciality.setImage(path);
+        return this.specialityService.addSpeciality(speciality);
+    }
+
     @PutMapping("/updateproduct")
     public Product updateProduct(@RequestParam("product") String productStr,@RequestParam("images") MultipartFile[] images,@RequestParam("catalogue") MultipartFile catalogue) {
         Product product = new Gson().fromJson(productStr, Product.class);
@@ -139,6 +147,15 @@ public class ProviderController {
         this.providerService.updateProduct(product.getId(),product);
     }
 
+    @PutMapping("/updatedSpeciality/{id}")
+    public Speciality updateProduct( @PathVariable("id") long id, @RequestParam("speciality") String specialityStr,@RequestParam("image") MultipartFile imageStr) {
+        Speciality speciality = new Gson().fromJson(specialityStr, Speciality.class);
+        String path = this.imageStorageService.storeImageForSpeciality(imageStr,speciality);
+        speciality.setImage(path);
+        speciality.setId(id);
+        return this.specialityService.addSpeciality(speciality);
+    }
+
     @PostMapping("/register")
     public Provider register(@RequestParam("data") String data,@RequestParam("specialities") String[] specialities,
                             @RequestParam("society") String society ) {
@@ -162,10 +179,14 @@ public class ProviderController {
         return this.adminService.addProvider(provider);
     }
 
-
     @DeleteMapping("/deleteproduct/{id}")
     public boolean deleteProduct(@Valid @PathVariable long id) {
         return  this.providerService.deleteProduct(id);
+    }
+
+    @DeleteMapping("/deletedSpeciality/{id}")
+    public boolean deletedSpeciality(@Valid @PathVariable long id) {
+        return  this.specialityService.deletedSpeciality(id);
     }
 
     @GetMapping("/getproduct/{id}")

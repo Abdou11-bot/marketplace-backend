@@ -41,6 +41,14 @@ public class Product {
 //	Provider provider;
 
 
+	public Speciality getSpeciality() {
+		return speciality;
+	}
+
+	public void setSpeciality(Speciality speciality) {
+		this.speciality = speciality;
+	}
+
 	public boolean isBlocked() {
 		return blocked;
 	}
